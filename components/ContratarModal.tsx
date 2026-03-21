@@ -40,11 +40,11 @@ const initialForm: FormData = {
 };
 
 // 👇 Reemplazá con tus links reales
-const MERCADOPAGO_URL = "https://mpago.la/TU_LINK_ACA";
+const MERCADOPAGO_URL = "https://link.mercadopago.com.ar/turnosbots";
 const LEMONSQUEEZY_URL = "https://TU_TIENDA.lemonsqueezy.com/checkout/TU_LINK";
 
 // 👇 URL de tu backend en Railway
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://tu-backend.railway.app";
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "bot-peluqueria-production.up.railway.app";
 
 export default function ContratarModal({
   plan: planInicial,
