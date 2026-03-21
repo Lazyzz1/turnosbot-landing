@@ -151,23 +151,11 @@ function initPricingPlans() {
             let message = '';
             
             if (plan === 'Argentina') {
-                message = `Hola! Estoy interesado en el TurnosBot con *pago en Argentina* 🇦🇷\n\n` +
-                         `💳 MercadoPago - Pesos Argentinos\n\n` +
-                         `📋 *Detalle de inversión:*\n` +
-                         `• Setup inicial: $${parseInt(setupFee).toLocaleString('es-AR')} ${currency} (una sola vez)\n` +
-                         `• Mensualidad: $${parseInt(monthlyFee).toLocaleString('es-AR')} ${currency}/mes\n\n` +
-                         `💡 Primer mes: $${parseInt(setupFee).toLocaleString('es-AR')} ${currency}\n` +
-                         `💡 Desde el 2º mes: $${parseInt(monthlyFee).toLocaleString('es-AR')} ${currency}/mes\n\n` +
+                message = `Hola! Estoy interesado en el TurnosBot con *pago en Argentina* 🇦🇷` +                       
                          `¿Me pueden dar más información y ayudarme con la configuración?`;
             } else if (plan === 'Internacional') {
-                message = `Hola! Estoy interesado en el TurnosBot con *pago internacional* 🌎\n\n` +
-                         `💰 Tarjeta Internacional - Dólares\n\n` +
-                         `📋 *Detalle de inversión:*\n` +
-                         `• Setup inicial: $${setupFee} ${currency} (una sola vez)\n` +
-                         `• Mensualidad: $${monthlyFee} ${currency}/mes\n\n` +
-                         `💡 Primer mes: $${setupFee} ${currency}\n` +
-                         `💡 Desde el 2º mes: $${monthlyFee} ${currency}/mes\n\n` +
-                         `¿Me pueden dar más información y ayudarme con la configuración?`;
+                message = `Hola! Estoy interesado en el TurnosBot con *pago internacional*`
+                        `¿Me pueden dar más información y ayudarme con la configuración?`;
             } else {
                 // Fallback para otros planes
                 message = `Hola! Estoy interesado en el TurnosBot.\n\n¿Me pueden dar más información?`;
