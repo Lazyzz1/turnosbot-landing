@@ -1,5 +1,8 @@
 "use client"
 
+import { useState } from "react"
+import ContratarModal from "@/components/ContratarModal"
+
 import { Button } from "@/components/ui/button"
 import { Check, CreditCard, Globe, Sparkles } from "lucide-react"
 
@@ -56,6 +59,7 @@ const plans = [
 ]
 
 export function PricingSection() {
+  const [modalPlan, setModalPlan] = useState<"argentina" | "internacional" | null>(null)
   return (
     <section id="pricing" className="relative py-24 lg:py-32 overflow-hidden">
       {/* Background */}
@@ -169,6 +173,7 @@ export function PricingSection() {
                 onMouseLeave={(e) => {
                   e.currentTarget.style.opacity = "1"
                 }}
+                onClick={() => setModalPlan(plan.id === "argentina" ? "argentina" : "internacional")}
               >
                 <CreditCard className="mr-2 h-5 w-5" />
                 {plan.ctaText}
@@ -215,6 +220,14 @@ export function PricingSection() {
           </span>
         </div>
       </div>
+
+      {/* Modal de contratación */}
+      {modalPlan && (
+        <ContratarModal
+          plan={modalPlan}
+          onClose={() => setModalPlan(null)}
+        />
+      )}
     </section>
   )
 }
