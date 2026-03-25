@@ -40,11 +40,11 @@ const initialForm: FormData = {
 };
 
 // 👇 Reemplazá con tus links reales
-const MERCADOPAGO_URL = "https://link.mercadopago.com.ar/turnosbots";
+const MERCADOPAGO_URL = "https://mpago.la/TU_LINK_ACA";
 const LEMONSQUEEZY_URL = "https://TU_TIENDA.lemonsqueezy.com/checkout/TU_LINK";
 
 // 👇 URL de tu backend en Railway
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "bot-peluqueria-production.up.railway.app";
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://tu-backend.railway.app";
 
 export default function ContratarModal({
   plan: planInicial,
@@ -160,7 +160,7 @@ export default function ContratarModal({
                 <label className={labelClass}>Teléfono (WhatsApp con código de país)</label>
                 <input className={inputClass} placeholder="+5491112345678" value={form.telefono}
                   onChange={(e) => update("telefono", e.target.value)} />
-                <p className="text-gray-500 text-xs mt-1">Acá te vamos a contactar para coordinar el setup</p>
+                <p className="text-gray-500 text-xs mt-1">Acá te contactamos para empezar tu prueba gratis</p>
               </div>
             </div>
           )}
@@ -240,18 +240,23 @@ export default function ContratarModal({
           {/* ── PASO 4: Confirmar y pagar ── */}
           {step === 4 && (
             <div className="space-y-4">
-              <p className="text-gray-400 text-sm mb-2">✅ Resumen antes de pagar</p>
+              <p className="text-gray-400 text-sm mb-2">✅ Resumen antes de confirmar</p>
               <div className="bg-gray-800 rounded-xl p-4 space-y-2 border border-gray-700 text-sm">
                 <p className="text-white"><span className="text-gray-400">Nombre:</span> {form.nombre} {form.apellido}</p>
                 <p className="text-white"><span className="text-gray-400">Email:</span> {form.email}</p>
                 <p className="text-white"><span className="text-gray-400">Negocio:</span> {form.nombre_negocio}</p>
                 <p className="text-white"><span className="text-gray-400">Ubicación:</span> {form.ubicacion}</p>
                 <p className="text-white"><span className="text-gray-400">Peluqueros:</span> {form.cantidad_peluqueros}</p>
-                <p className="text-white"><span className="text-gray-400">Plan:</span> {form.plan === "argentina" ? "🇦🇷 Argentina (ARS)" : "🌎 Internacional (USD)"}</p>
+                <p className="text-white"><span className="text-gray-400">Plan:</span> {form.plan === "argentina" ? "🇦🇷 Argentina · $24.500 ARS/mes" : "🌎 Internacional · $34.50 USD/mes"}</p>
               </div>
               <div className="bg-green-900/30 border border-green-700 rounded-xl p-4 text-sm text-green-300">
-                <p className="font-semibold mb-1">¿Qué pasa después del pago?</p>
-                <p className="text-green-400 text-xs">En menos de 48hs te contactamos por WhatsApp para configurar tu bot con estos datos.</p>
+                <p className="font-semibold mb-2">🎁 ¿Cómo funciona la prueba gratis?</p>
+                <div className="space-y-1 text-green-400 text-xs">
+                  <p>1. Enviás estos datos → te contactamos en menos de 48hs</p>
+                  <p>2. Configuramos tu bot completamente gratis</p>
+                  <p>3. Probás 7 días sin pagar nada</p>
+                  <p>4. Si te gusta, cargás el método de pago y seguís</p>
+                </div>
               </div>
               {error && (
                 <p className="text-red-400 text-sm bg-red-900/30 border border-red-700 rounded-lg p-3">{error}</p>
@@ -259,25 +264,27 @@ export default function ContratarModal({
             </div>
           )}
 
-          {/* ── PASO 5: Éxito → link de pago ── */}
+          {/* ── PASO 5: Éxito → próximos pasos ── */}
           {step === 5 && (
             <div className="text-center space-y-5 py-4">
               <div className="text-5xl">🎉</div>
               <div>
-                <p className="text-white font-bold text-lg">¡Datos guardados correctamente!</p>
-                <p className="text-gray-400 text-sm mt-1">Ahora completá el pago para reservar tu lugar</p>
+                <p className="text-white font-bold text-lg">¡Solicitud recibida!</p>
+                <p className="text-gray-400 text-sm mt-1">En menos de 48hs te contactamos por WhatsApp</p>
               </div>
-              <a
-                href={paymentUrl || (form.plan === "argentina" ? MERCADOPAGO_URL : LEMONSQUEEZY_URL)}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block w-full text-center font-bold py-3 px-6 rounded-xl transition-all hover:scale-[1.02] text-white"
-                style={{ background: form.plan === "argentina" ? "#009ee3" : "#f5a623" }}
-              >
-                {form.plan === "argentina" ? "💳 Pagar con MercadoPago" : "💳 Pagar con Tarjeta Internacional"}
-              </a>
+              <div className="bg-gray-800 rounded-xl p-4 text-left space-y-2 border border-gray-700">
+                <p className="text-green-400 text-sm font-semibold mb-2">¿Qué pasa ahora?</p>
+                <div className="space-y-2 text-xs text-gray-300">
+                  <p>✅ <span className="text-white">Paso 1:</span> Te contactamos y configuramos tu bot</p>
+                  <p>✅ <span className="text-white">Paso 2:</span> Probás 7 días completamente gratis</p>
+                  <p>✅ <span className="text-white">Paso 3:</span> Si te convence, cargás el pago y seguís</p>
+                  <p className="text-gray-500 pt-1">
+                    Precio: {form.plan === "argentina" ? "$24.500 ARS/mes" : "$34.50 USD/mes"} · Cancelá cuando quieras
+                  </p>
+                </div>
+              </div>
               <p className="text-gray-500 text-xs">
-                Una vez confirmado el pago, te contactamos en menos de 48hs hábiles 🚀
+                Revisá tu WhatsApp — te escribimos al {form.telefono} 📱
               </p>
             </div>
           )}
