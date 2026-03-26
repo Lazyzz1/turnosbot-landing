@@ -68,15 +68,15 @@ export function Footer() {
             <ul className="space-y-3">
               <li className="flex items-center gap-3 text-muted-foreground">
                 <Mail className="h-4 w-4 text-[#8B5CF6]" />
-                <span>hola@turnosbot.com</span>
+                <span>turnosbot404@gmail.com</span>
               </li>
               <li className="flex items-center gap-3 text-muted-foreground">
                 <Phone className="h-4 w-4 text-[#10B981]" />
-                <span>+54 9 11 1234-5678</span>
+                <span>+54 9 297 537-5667</span>
               </li>
               <li className="flex items-center gap-3 text-muted-foreground">
                 <MapPin className="h-4 w-4 text-[#F5B841]" />
-                <span>Buenos Aires, Argentina</span>
+                <span>Argentina</span>
               </li>
             </ul>
           </div>

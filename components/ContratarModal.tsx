@@ -158,7 +158,7 @@ export default function ContratarModal({
               </div>
               <div>
                 <label className={labelClass}>Teléfono (WhatsApp con código de país)</label>
-                <input className={inputClass} placeholder="+5491112345678" value={form.telefono}
+                <input className={inputClass} placeholder="+5492975375667" value={form.telefono}
                   onChange={(e) => update("telefono", e.target.value)} />
                 <p className="text-gray-500 text-xs mt-1">Acá te contactamos para empezar tu prueba gratis</p>
               </div>
@@ -226,7 +226,7 @@ export default function ContratarModal({
                       </div>
                       <div>
                         <label className={labelClass}>WhatsApp</label>
-                        <input className={inputClass} placeholder="+5491187654321" value={p.telefono}
+                        <input className={inputClass} placeholder="+5492975375667" value={p.telefono}
                           onChange={(e) => updatePeluquero(i, "telefono", e.target.value)} />
                       </div>
                     </div>
