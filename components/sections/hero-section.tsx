@@ -54,13 +54,15 @@ export function HeroSection() {
 
           {/* CTA Buttons */}
           <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row">
-            <Button
-              size="lg"
-              className="group h-14 min-w-[200px] bg-[#F5B841] text-[#121212] text-base font-semibold hover:bg-[#D4A138] shadow-xl shadow-[#F5B841]/25 transition-all hover:shadow-[#F5B841]/40"
-            >
-              Consultar sin Compromiso
-              <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
-            </Button>
+            <a href="mailto:turnosbot404@gmail.com?subject=Consulta%20sin%20Compromiso%20-%20TurnosBot">
+              <Button
+                size="lg"
+                className="group h-14 min-w-[200px] bg-[#F5B841] text-[#121212] text-base font-semibold hover:bg-[#D4A138] shadow-xl shadow-[#F5B841]/25 transition-all hover:shadow-[#F5B841]/40"
+              >
+                Consultar sin Compromiso
+                <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
+              </Button>
+            </a>
             <Button
               size="lg"
               variant="outline"

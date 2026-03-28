@@ -40,13 +40,15 @@ export function CTASection() {
 
           {/* CTA Button */}
           <div className="mt-10">
-            <Button
-              size="lg"
-              className="group h-16 px-10 text-lg bg-[#F5B841] text-[#121212] font-semibold hover:bg-[#D4A138] shadow-2xl shadow-[#F5B841]/30 transition-all hover:shadow-[#F5B841]/50 animate-pulse-glow"
-            >
-              Consultar sin Compromiso
-              <ArrowRight className="ml-3 h-6 w-6 transition-transform group-hover:translate-x-1" />
-            </Button>
+            <a href="mailto:turnosbot404@gmail.com?subject=Consulta%20sin%20Compromiso%20-%20TurnosBot">
+              <Button
+                size="lg"
+                className="group h-16 px-10 text-lg bg-[#F5B841] text-[#121212] font-semibold hover:bg-[#D4A138] shadow-2xl shadow-[#F5B841]/30 transition-all hover:shadow-[#F5B841]/50 animate-pulse-glow"
+              >
+                Consultar sin Compromiso
+                <ArrowRight className="ml-3 h-6 w-6 transition-transform group-hover:translate-x-1" />
+              </Button>
+            </a>
           </div>
 
           {/* Trust text */}
