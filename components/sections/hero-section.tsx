@@ -63,14 +63,16 @@ export function HeroSection() {
                 <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
               </Button>
             </a>
-            <Button
-              size="lg"
-              variant="outline"
-              className="h-14 min-w-[200px] border-2 border-[#333] text-base font-semibold text-foreground hover:border-[#8B5CF6] hover:bg-[#8B5CF6]/10 hover:text-[#A78BFA]"
-            >
-              <Play className="mr-2 h-5 w-5 fill-current" />
-              Ver Demo
-            </Button>
+            <a href="https://wa.me/12624767007?text=Hola%2C%20quiero%20probar%20el%20demo%20de%20TurnosBot" target="_blank" rel="noopener noreferrer">
+              <Button
+                size="lg"
+                variant="outline"
+                className="h-14 min-w-[200px] border-2 border-[#333] text-base font-semibold text-foreground hover:border-[#8B5CF6] hover:bg-[#8B5CF6]/10 hover:text-[#A78BFA]"
+              >
+                <Play className="mr-2 h-5 w-5 fill-current" />
+                Ver Demo
+              </Button>
+            </a>
           </div>
 
           {/* Stats */}

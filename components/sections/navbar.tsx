@@ -57,12 +57,14 @@ export function Navbar() {
 
           {/* CTA Buttons */}
           <div className="hidden items-center gap-3 md:flex">
-            <Button
-              variant="ghost"
-              className="text-foreground hover:text-[#F5B841] hover:bg-[#F5B841]/10"
-            >
-              Ver Demo
-            </Button>
+            <a href="https://wa.me/12624767007?text=Hola%2C%20quiero%20probar%20el%20demo%20de%20TurnosBot" target="_blank" rel="noopener noreferrer">
+              <Button
+                variant="ghost"
+                className="text-foreground hover:text-[#F5B841] hover:bg-[#F5B841]/10"
+              >
+                Ver Demo
+              </Button>
+            </a>
             <a href="https://mail.google.com/mail/?view=cm&to=turnosbot404@gmail.com&su=Consulta%20sobre%20TurnosBot" target="_blank" rel="noopener noreferrer">
               <Button className="bg-[#F5B841] text-[#121212] font-semibold hover:bg-[#D4A138] shadow-lg shadow-[#F5B841]/20">
                 Consultar
