@@ -8,21 +8,21 @@ interface Peluquero {
 }
 
 interface FormData {
-  // Paso 1 - Datos personales
   nombre: string;
   apellido: string;
   email: string;
   telefono: string;
-  // Paso 2 - Datos del negocio
   nombre_negocio: string;
   ubicacion: string;
   horarios: string;
-  servicios: string; // "Corte $5000, Tinte $8000, ..."
-  // Paso 3 - Peluqueros
+  servicios: string;
   cantidad_peluqueros: number;
   peluqueros: Peluquero[];
-  // Paso 4 - Plan
   plan: "argentina" | "internacional" | "";
+}
+
+interface FieldErrors {
+  [key: string]: string;
 }
 
 const initialForm: FormData = {
@@ -39,11 +39,6 @@ const initialForm: FormData = {
   plan: "",
 };
 
-// 👇 Reemplazá con tus links reales
-const MERCADOPAGO_URL = "https://mpago.la/TU_LINK_ACA";
-const LEMONSQUEEZY_URL = "https://TU_TIENDA.lemonsqueezy.com/checkout/TU_LINK";
-
-// 👇 URL de tu backend en Railway
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://tu-backend.railway.app";
 
 export default function ContratarModal({
@@ -57,12 +52,17 @@ export default function ContratarModal({
   const [form, setForm] = useState<FormData>({ ...initialForm, plan: planInicial });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [paymentUrl, setPaymentUrl] = useState("");
+  const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
 
   const totalSteps = 4;
 
-  const update = (field: keyof FormData, value: unknown) =>
+  const update = (field: keyof FormData, value: unknown) => {
     setForm((prev) => ({ ...prev, [field]: value }));
+    // Limpiar error del campo cuando el usuario escribe
+    if (fieldErrors[field]) {
+      setFieldErrors((prev) => { const n = { ...prev }; delete n[field]; return n; });
+    }
+  };
 
   const updatePeluquero = (i: number, field: keyof Peluquero, value: string) => {
     const updated = [...form.peluqueros];
@@ -77,7 +77,49 @@ export default function ContratarModal({
     setForm((prev) => ({ ...prev, cantidad_peluqueros: cantidad, peluqueros: arr }));
   };
 
+  // Validación por paso
+  const validarPaso = (): boolean => {
+    const errors: FieldErrors = {};
+
+    if (step === 1) {
+      if (!form.nombre.trim())   errors.nombre   = "El nombre es obligatorio";
+      if (!form.apellido.trim()) errors.apellido = "El apellido es obligatorio";
+      if (!form.email.trim())    errors.email    = "El email es obligatorio";
+      else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email))
+                                 errors.email    = "El email no es válido";
+      if (!form.telefono.trim()) errors.telefono = "El teléfono es obligatorio";
+      else if (!form.telefono.startsWith("+"))
+                                 errors.telefono = "Debe incluir el código de país (ej: +54...)";
+    }
+
+    if (step === 2) {
+      if (!form.nombre_negocio.trim()) errors.nombre_negocio = "El nombre del negocio es obligatorio";
+      if (!form.ubicacion.trim())      errors.ubicacion      = "La ubicación es obligatoria";
+      if (!form.horarios.trim())       errors.horarios       = "Los horarios son obligatorios";
+      if (!form.servicios.trim())      errors.servicios      = "Los servicios son obligatorios";
+    }
+
+    if (step === 3) {
+      form.peluqueros.forEach((p, i) => {
+        if (!p.nombre.trim())
+          errors[`peluquero_${i}_nombre`] = "El nombre es obligatorio";
+        if (!p.telefono.trim())
+          errors[`peluquero_${i}_telefono`] = "El WhatsApp es obligatorio";
+        else if (!p.telefono.startsWith("+"))
+          errors[`peluquero_${i}_telefono`] = "Incluí el código de país (ej: +54...)";
+      });
+    }
+
+    setFieldErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  const handleContinuar = () => {
+    if (validarPaso()) setStep((s) => s + 1);
+  };
+
   const handleSubmit = async () => {
+    if (!validarPaso()) return;
     setLoading(true);
     setError("");
     try {
@@ -87,9 +129,15 @@ export default function ContratarModal({
         body: JSON.stringify(form),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.detail || "Error al procesar");
-      setPaymentUrl(data.payment_url);
-      setStep(5); // paso de éxito
+
+      // Verificar si el teléfono ya usó un trial
+      if (res.status === 409) {
+        setError(data.error || "Este número de WhatsApp ya utilizó la prueba gratuita.");
+        return;
+      }
+
+      if (!res.ok) throw new Error(data.error || "Error al procesar");
+      setStep(5);
     } catch (e: unknown) {
       setError(e instanceof Error ? e.message : "Error al conectar con el servidor");
     } finally {
@@ -97,9 +145,17 @@ export default function ContratarModal({
     }
   };
 
-  const inputClass =
-    "w-full bg-gray-800 border border-gray-600 text-white rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-green-500 transition-colors placeholder-gray-500";
+  const inputClass = (field?: string) =>
+    `w-full bg-gray-800 border ${field && fieldErrors[field] ? "border-red-500" : "border-gray-600"} text-white rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-green-500 transition-colors placeholder-gray-500`;
+
   const labelClass = "block text-gray-300 text-sm font-medium mb-1";
+
+  const Required = () => <span className="text-red-400 ml-0.5">*</span>;
+
+  const FieldError = ({ field }: { field: string }) =>
+    fieldErrors[field] ? (
+      <p className="text-red-400 text-xs mt-1">{fieldErrors[field]}</p>
+    ) : null;
 
   return (
     <div
@@ -114,7 +170,7 @@ export default function ContratarModal({
         <div className="sticky top-0 bg-gray-900 border-b border-gray-700 px-6 py-4 flex items-center justify-between rounded-t-2xl z-10">
           <div>
             <h2 className="text-white font-bold text-lg">
-              {step === 5 ? "¡Listo para pagar! 🎉" : "Contratar TurnosBot"}
+              {step === 5 ? "¡Solicitud enviada! 🎉" : "Contratar TurnosBot"}
             </h2>
             {step < 5 && (
               <p className="text-gray-400 text-xs mt-0.5">Paso {step} de {totalSteps}</p>
@@ -133,34 +189,47 @@ export default function ContratarModal({
           </div>
         )}
 
+        {/* Indicador campos obligatorios */}
+        {step < 5 && (
+          <p className="text-gray-500 text-xs px-6 pt-4">
+            Los campos con <span className="text-red-400">*</span> son obligatorios
+          </p>
+        )}
+
         <div className="p-6">
 
           {/* ── PASO 1: Datos personales ── */}
           {step === 1 && (
             <div className="space-y-4">
-              <p className="text-gray-400 text-sm mb-4">👤 Tus datos de contacto</p>
+              <p className="text-gray-400 text-sm mb-2">👤 Tus datos de contacto</p>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className={labelClass}>Nombre</label>
-                  <input className={inputClass} placeholder="Juan" value={form.nombre}
+                  <label className={labelClass}>Nombre <Required /></label>
+                  <input className={inputClass("nombre")} placeholder="Juan" value={form.nombre}
                     onChange={(e) => update("nombre", e.target.value)} />
+                  <FieldError field="nombre" />
                 </div>
                 <div>
-                  <label className={labelClass}>Apellido</label>
-                  <input className={inputClass} placeholder="García" value={form.apellido}
+                  <label className={labelClass}>Apellido <Required /></label>
+                  <input className={inputClass("apellido")} placeholder="García" value={form.apellido}
                     onChange={(e) => update("apellido", e.target.value)} />
+                  <FieldError field="apellido" />
                 </div>
               </div>
               <div>
-                <label className={labelClass}>Email</label>
-                <input className={inputClass} type="email" placeholder="juan@gmail.com" value={form.email}
+                <label className={labelClass}>Email <Required /></label>
+                <input className={inputClass("email")} type="email" placeholder="juan@gmail.com" value={form.email}
                   onChange={(e) => update("email", e.target.value)} />
+                <FieldError field="email" />
               </div>
               <div>
-                <label className={labelClass}>Teléfono (WhatsApp con código de país)</label>
-                <input className={inputClass} placeholder="+5492975375667" value={form.telefono}
+                <label className={labelClass}>Teléfono WhatsApp <Required /></label>
+                <input className={inputClass("telefono")} placeholder="+5491112345678" value={form.telefono}
                   onChange={(e) => update("telefono", e.target.value)} />
-                <p className="text-gray-500 text-xs mt-1">Acá te contactamos para empezar tu prueba gratis</p>
+                <FieldError field="telefono" />
+                {!fieldErrors.telefono && (
+                  <p className="text-gray-500 text-xs mt-1">Con código de país · Acá te contactamos para empezar tu prueba gratis</p>
+                )}
               </div>
             </div>
           )}
@@ -168,32 +237,40 @@ export default function ContratarModal({
           {/* ── PASO 2: Datos del negocio ── */}
           {step === 2 && (
             <div className="space-y-4">
-              <p className="text-gray-400 text-sm mb-4">🏪 Datos de tu negocio</p>
+              <p className="text-gray-400 text-sm mb-2">🏪 Datos de tu negocio</p>
               <div>
-                <label className={labelClass}>Nombre del negocio</label>
-                <input className={inputClass} placeholder="Peluquería El Estilo" value={form.nombre_negocio}
+                <label className={labelClass}>Nombre del negocio <Required /></label>
+                <input className={inputClass("nombre_negocio")} placeholder="Peluquería El Estilo" value={form.nombre_negocio}
                   onChange={(e) => update("nombre_negocio", e.target.value)} />
+                <FieldError field="nombre_negocio" />
               </div>
               <div>
-                <label className={labelClass}>Ubicación (dirección completa)</label>
-                <input className={inputClass} placeholder="Av. Corrientes 1234, CABA" value={form.ubicacion}
+                <label className={labelClass}>Ubicación <Required /></label>
+                <input className={inputClass("ubicacion")} placeholder="Av. Corrientes 1234, CABA" value={form.ubicacion}
                   onChange={(e) => update("ubicacion", e.target.value)} />
-                <p className="text-gray-500 text-xs mt-1">La agregamos a Google Maps para que tus clientes te encuentren</p>
+                <FieldError field="ubicacion" />
+                {!fieldErrors.ubicacion && (
+                  <p className="text-gray-500 text-xs mt-1">La agregamos a Google Maps para que tus clientes te encuentren</p>
+                )}
               </div>
               <div>
-                <label className={labelClass}>Horarios de atención</label>
-                <textarea className={`${inputClass} resize-none h-20`}
+                <label className={labelClass}>Horarios de atención <Required /></label>
+                <textarea className={`${inputClass("horarios")} resize-none h-20`}
                   placeholder={"Lunes a Viernes: 9:00 - 19:00\nSábados: 9:00 - 14:00"}
                   value={form.horarios}
                   onChange={(e) => update("horarios", e.target.value)} />
+                <FieldError field="horarios" />
               </div>
               <div>
-                <label className={labelClass}>Servicios y precios</label>
-                <textarea className={`${inputClass} resize-none h-24`}
+                <label className={labelClass}>Servicios y precios <Required /></label>
+                <textarea className={`${inputClass("servicios")} resize-none h-24`}
                   placeholder={"Corte de cabello - $5.000\nTinte completo - $12.000\nBarba - $3.000"}
                   value={form.servicios}
                   onChange={(e) => update("servicios", e.target.value)} />
-                <p className="text-gray-500 text-xs mt-1">Un servicio por línea con su precio</p>
+                <FieldError field="servicios" />
+                {!fieldErrors.servicios && (
+                  <p className="text-gray-500 text-xs mt-1">Un servicio por línea con su precio</p>
+                )}
               </div>
             </div>
           )}
@@ -201,11 +278,11 @@ export default function ContratarModal({
           {/* ── PASO 3: Peluqueros ── */}
           {step === 3 && (
             <div className="space-y-4">
-              <p className="text-gray-400 text-sm mb-4">✂️ Tu equipo de trabajo</p>
+              <p className="text-gray-400 text-sm mb-2">✂️ Tu equipo de trabajo</p>
               <div>
-                <label className={labelClass}>¿Cuántos peluqueros/profesionales tenés?</label>
+                <label className={labelClass}>¿Cuántos profesionales tenés? <Required /></label>
                 <select
-                  className={inputClass}
+                  className={inputClass()}
                   value={form.cantidad_peluqueros}
                   onChange={(e) => handleCantidadPeluqueros(Number(e.target.value))}
                 >
@@ -220,14 +297,16 @@ export default function ContratarModal({
                     <p className="text-green-400 text-sm font-semibold mb-3">Peluquero {i + 1}</p>
                     <div className="grid grid-cols-2 gap-3">
                       <div>
-                        <label className={labelClass}>Nombre</label>
-                        <input className={inputClass} placeholder="Nombre" value={p.nombre}
+                        <label className={labelClass}>Nombre <Required /></label>
+                        <input className={inputClass(`peluquero_${i}_nombre`)} placeholder="Nombre" value={p.nombre}
                           onChange={(e) => updatePeluquero(i, "nombre", e.target.value)} />
+                        <FieldError field={`peluquero_${i}_nombre`} />
                       </div>
                       <div>
-                        <label className={labelClass}>WhatsApp</label>
-                        <input className={inputClass} placeholder="+5492975375667" value={p.telefono}
+                        <label className={labelClass}>WhatsApp <Required /></label>
+                        <input className={inputClass(`peluquero_${i}_telefono`)} placeholder="+5491187654321" value={p.telefono}
                           onChange={(e) => updatePeluquero(i, "telefono", e.target.value)} />
+                        <FieldError field={`peluquero_${i}_telefono`} />
                       </div>
                     </div>
                   </div>
@@ -237,13 +316,14 @@ export default function ContratarModal({
             </div>
           )}
 
-          {/* ── PASO 4: Confirmar y pagar ── */}
+          {/* ── PASO 4: Confirmar ── */}
           {step === 4 && (
             <div className="space-y-4">
               <p className="text-gray-400 text-sm mb-2">✅ Resumen antes de confirmar</p>
               <div className="bg-gray-800 rounded-xl p-4 space-y-2 border border-gray-700 text-sm">
                 <p className="text-white"><span className="text-gray-400">Nombre:</span> {form.nombre} {form.apellido}</p>
                 <p className="text-white"><span className="text-gray-400">Email:</span> {form.email}</p>
+                <p className="text-white"><span className="text-gray-400">WhatsApp:</span> {form.telefono}</p>
                 <p className="text-white"><span className="text-gray-400">Negocio:</span> {form.nombre_negocio}</p>
                 <p className="text-white"><span className="text-gray-400">Ubicación:</span> {form.ubicacion}</p>
                 <p className="text-white"><span className="text-gray-400">Peluqueros:</span> {form.cantidad_peluqueros}</p>
@@ -264,7 +344,7 @@ export default function ContratarModal({
             </div>
           )}
 
-          {/* ── PASO 5: Éxito → próximos pasos ── */}
+          {/* ── PASO 5: Éxito ── */}
           {step === 5 && (
             <div className="text-center space-y-5 py-4">
               <div className="text-5xl">🎉</div>
@@ -289,7 +369,7 @@ export default function ContratarModal({
             </div>
           )}
 
-          {/* ── Botones de navegación ── */}
+          {/* ── Navegación ── */}
           {step < 5 && (
             <div className="flex gap-3 mt-6">
               {step > 1 && (
@@ -302,7 +382,7 @@ export default function ContratarModal({
               )}
               {step < 4 ? (
                 <button
-                  onClick={() => setStep((s) => s + 1)}
+                  onClick={handleContinuar}
                   className="flex-1 bg-green-600 hover:bg-green-500 text-white font-bold py-2.5 rounded-xl transition-colors"
                 >
                   Continuar →
@@ -313,7 +393,7 @@ export default function ContratarModal({
                   disabled={loading}
                   className="flex-1 bg-green-600 hover:bg-green-500 disabled:opacity-50 text-white font-bold py-2.5 rounded-xl transition-colors"
                 >
-                  {loading ? "Guardando..." : "Guardar y pagar →"}
+                  {loading ? "Enviando..." : "Confirmar →"}
                 </button>
               )}
             </div>

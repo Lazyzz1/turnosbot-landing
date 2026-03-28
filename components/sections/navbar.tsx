@@ -63,9 +63,11 @@ export function Navbar() {
             >
               Ver Demo
             </Button>
-            <Button className="bg-[#F5B841] text-[#121212] font-semibold hover:bg-[#D4A138] shadow-lg shadow-[#F5B841]/20">
-              Consultar
-            </Button>
+            <a href="mailto:turnosbot404@gmail.com?subject=Consulta%20sobre%20TurnosBot">
+              <Button className="bg-[#F5B841] text-[#121212] font-semibold hover:bg-[#D4A138] shadow-lg shadow-[#F5B841]/20">
+                Consultar
+              </Button>
+            </a>
           </div>
 
           {/* Mobile Menu Button */}
@@ -93,9 +95,11 @@ export function Navbar() {
                 </Link>
               ))}
               <hr className="border-border" />
-              <Button className="w-full bg-[#F5B841] text-[#121212] font-semibold hover:bg-[#D4A138]">
-                Consultar
-              </Button>
+              <a href="mailto:turnosbot404@gmail.com?subject=Consulta%20sobre%20TurnosBot" className="w-full">
+                <Button className="w-full bg-[#F5B841] text-[#121212] font-semibold hover:bg-[#D4A138]">
+                  Consultar
+                </Button>
+              </a>
             </div>
           </div>
         )}
