@@ -63,7 +63,7 @@ export function Navbar() {
             >
               Ver Demo
             </Button>
-            <a href="mailto:turnosbot404@gmail.com?subject=Consulta%20sobre%20TurnosBot">
+            <a href="https://mail.google.com/mail/?view=cm&to=turnosbot404@gmail.com&su=Consulta%20sobre%20TurnosBot" target="_blank" rel="noopener noreferrer">
               <Button className="bg-[#F5B841] text-[#121212] font-semibold hover:bg-[#D4A138] shadow-lg shadow-[#F5B841]/20">
                 Consultar
               </Button>
@@ -95,7 +95,7 @@ export function Navbar() {
                 </Link>
               ))}
               <hr className="border-border" />
-              <a href="mailto:turnosbot404@gmail.com?subject=Consulta%20sobre%20TurnosBot" className="w-full">
+              <a href="https://mail.google.com/mail/?view=cm&to=turnosbot404@gmail.com&su=Consulta%20sobre%20TurnosBot" target="_blank" rel="noopener noreferrer" className="w-full">
                 <Button className="w-full bg-[#F5B841] text-[#121212] font-semibold hover:bg-[#D4A138]">
                   Consultar
                 </Button>

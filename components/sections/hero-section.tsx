@@ -54,7 +54,7 @@ export function HeroSection() {
 
           {/* CTA Buttons */}
           <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row">
-            <a href="mailto:turnosbot404@gmail.com?subject=Consulta%20sin%20Compromiso%20-%20TurnosBot">
+            <a href="https://mail.google.com/mail/?view=cm&to=turnosbot404@gmail.com&su=Consulta%20sin%20Compromiso%20-%20TurnosBot" target="_blank" rel="noopener noreferrer">
               <Button
                 size="lg"
                 className="group h-14 min-w-[200px] bg-[#F5B841] text-[#121212] text-base font-semibold hover:bg-[#D4A138] shadow-xl shadow-[#F5B841]/25 transition-all hover:shadow-[#F5B841]/40"

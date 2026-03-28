@@ -40,7 +40,7 @@ export function CTASection() {
 
           {/* CTA Button */}
           <div className="mt-10">
-            <a href="mailto:turnosbot404@gmail.com?subject=Consulta%20sin%20Compromiso%20-%20TurnosBot">
+            <a href="https://mail.google.com/mail/?view=cm&to=turnosbot404@gmail.com&su=Consulta%20sin%20Compromiso%20-%20TurnosBot" target="_blank" rel="noopener noreferrer">
               <Button
                 size="lg"
                 className="group h-16 px-10 text-lg bg-[#F5B841] text-[#121212] font-semibold hover:bg-[#D4A138] shadow-2xl shadow-[#F5B841]/30 transition-all hover:shadow-[#F5B841]/50 animate-pulse-glow"
