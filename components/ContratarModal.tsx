@@ -19,6 +19,7 @@ interface FormData {
   cantidad_peluqueros: number;
   peluqueros: Peluquero[];
   plan: "argentina" | "internacional" | "";
+  timezone: string;
 }
 
 interface FieldErrors {
@@ -37,6 +38,9 @@ const initialForm: FormData = {
   cantidad_peluqueros: 1,
   peluqueros: [{ nombre: "", telefono: "" }],
   plan: "",
+  timezone: typeof Intl !== "undefined"
+    ? Intl.DateTimeFormat().resolvedOptions().timeZone
+    : "America/Argentina/Buenos_Aires",
 };
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://tu-backend.railway.app";
@@ -252,6 +256,16 @@ export default function ContratarModal({
                 {!fieldErrors.ubicacion && (
                   <p className="text-gray-500 text-xs mt-1">La agregamos a Google Maps para que tus clientes te encuentren</p>
                 )}
+              </div>
+              <div>
+                <label className={labelClass}>Zona horaria detectada</label>
+                <div className="w-full bg-gray-700 border border-gray-600 text-gray-300 rounded-lg px-4 py-2.5 text-sm flex items-center justify-between">
+                  <span>🌍 {form.timezone}</span>
+                  <span className="text-gray-500 text-xs">Detectada automáticamente</span>
+                </div>
+                <p className="text-gray-500 text-xs mt-1">
+                  Usamos esto para configurar los horarios correctamente en tu zona horaria
+                </p>
               </div>
               <div>
                 <label className={labelClass}>Horarios de atención <Required /></label>
