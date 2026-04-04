@@ -45,6 +45,19 @@ const initialForm: FormData = {
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://tu-backend.railway.app";
 
+const LIMITS = {
+  nombre:         50,
+  apellido:       50,
+  email:          100,
+  telefono:       20,
+  nombre_negocio: 100,
+  ubicacion:      200,
+  horarios:       300,
+  servicios:      500,
+  peluquero_nombre: 50,
+  peluquero_tel:  20,
+};
+
 export default function ContratarModal({
   plan: planInicial,
   onClose,
@@ -156,6 +169,16 @@ export default function ContratarModal({
 
   const Required = () => <span className="text-red-400 ml-0.5">*</span>;
 
+  const CharCount = ({ value, max }: { value: string; max: number }) => {
+    const remaining = max - value.length;
+    const isNear = remaining <= 20;
+    return (
+      <span className={`text-xs ml-1 ${isNear ? "text-yellow-400" : "text-gray-600"}`}>
+        {value.length}/{max}
+      </span>
+    );
+  };
+
   const FieldError = ({ field }: { field: string }) =>
     fieldErrors[field] ? (
       <p className="text-red-400 text-xs mt-1">{fieldErrors[field]}</p>
@@ -209,26 +232,26 @@ export default function ContratarModal({
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className={labelClass}>Nombre <Required /></label>
-                  <input className={inputClass("nombre")} placeholder="Juan" value={form.nombre}
+                  <input className={inputClass("nombre")} placeholder="Juan" value={form.nombre} maxLength={LIMITS.nombre}
                     onChange={(e) => update("nombre", e.target.value)} />
                   <FieldError field="nombre" />
                 </div>
                 <div>
                   <label className={labelClass}>Apellido <Required /></label>
-                  <input className={inputClass("apellido")} placeholder="García" value={form.apellido}
+                  <input className={inputClass("apellido")} placeholder="García" value={form.apellido} maxLength={LIMITS.apellido}
                     onChange={(e) => update("apellido", e.target.value)} />
                   <FieldError field="apellido" />
                 </div>
               </div>
               <div>
                 <label className={labelClass}>Email <Required /></label>
-                <input className={inputClass("email")} type="email" placeholder="juan@gmail.com" value={form.email}
+                <input className={inputClass("email")} type="email" placeholder="juan@gmail.com" value={form.email} maxLength={LIMITS.email}
                   onChange={(e) => update("email", e.target.value)} />
                 <FieldError field="email" />
               </div>
               <div>
                 <label className={labelClass}>Teléfono WhatsApp <Required /></label>
-                <input className={inputClass("telefono")} placeholder="+5491112345678" value={form.telefono}
+                <input className={inputClass("telefono")} placeholder="+5491112345678" value={form.telefono} maxLength={LIMITS.telefono}
                   onChange={(e) => update("telefono", e.target.value)} />
                 <FieldError field="telefono" />
                 {!fieldErrors.telefono && (
@@ -244,14 +267,16 @@ export default function ContratarModal({
               <p className="text-gray-400 text-sm mb-2">🏪 Datos de tu negocio</p>
               <div>
                 <label className={labelClass}>Nombre del negocio <Required /></label>
-                <input className={inputClass("nombre_negocio")} placeholder="Peluquería El Estilo" value={form.nombre_negocio}
+                <input className={inputClass("nombre_negocio")} placeholder="Peluquería El Estilo" value={form.nombre_negocio} maxLength={LIMITS.nombre_negocio}
                   onChange={(e) => update("nombre_negocio", e.target.value)} />
+                <div className="flex justify-end mt-0.5"><CharCount value={form.nombre_negocio} max={LIMITS.nombre_negocio} /></div>
                 <FieldError field="nombre_negocio" />
               </div>
               <div>
                 <label className={labelClass}>Ubicación <Required /></label>
-                <input className={inputClass("ubicacion")} placeholder="Av. Corrientes 1234, CABA" value={form.ubicacion}
+                <input className={inputClass("ubicacion")} placeholder="Av. Corrientes 1234, CABA" value={form.ubicacion} maxLength={LIMITS.ubicacion}
                   onChange={(e) => update("ubicacion", e.target.value)} />
+                <div className="flex justify-end mt-0.5"><CharCount value={form.ubicacion} max={LIMITS.ubicacion} /></div>
                 <FieldError field="ubicacion" />
                 {!fieldErrors.ubicacion && (
                   <p className="text-gray-500 text-xs mt-1">La agregamos a Google Maps para que tus clientes te encuentren</p>
@@ -271,16 +296,18 @@ export default function ContratarModal({
                 <label className={labelClass}>Horarios de atención <Required /></label>
                 <textarea className={`${inputClass("horarios")} resize-none h-20`}
                   placeholder={"Lunes a Viernes: 9:00 - 19:00\nSábados: 9:00 - 14:00"}
-                  value={form.horarios}
+                  value={form.horarios} maxLength={LIMITS.horarios}
                   onChange={(e) => update("horarios", e.target.value)} />
+                <div className="flex justify-end mt-0.5"><CharCount value={form.horarios} max={LIMITS.horarios} /></div>
                 <FieldError field="horarios" />
               </div>
               <div>
                 <label className={labelClass}>Servicios y precios <Required /></label>
                 <textarea className={`${inputClass("servicios")} resize-none h-24`}
                   placeholder={"Corte de cabello - $5.000\nTinte completo - $12.000\nBarba - $3.000"}
-                  value={form.servicios}
+                  value={form.servicios} maxLength={LIMITS.servicios}
                   onChange={(e) => update("servicios", e.target.value)} />
+                <div className="flex justify-end mt-0.5"><CharCount value={form.servicios} max={LIMITS.servicios} /></div>
                 <FieldError field="servicios" />
                 {!fieldErrors.servicios && (
                   <p className="text-gray-500 text-xs mt-1">Un servicio por línea con su precio</p>
