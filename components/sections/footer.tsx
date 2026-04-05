@@ -88,10 +88,10 @@ export function Footer() {
             © {new Date().getFullYear()} TurnosBot. Todos los derechos reservados.
           </p>
           <div className="flex gap-6 text-sm text-muted-foreground">
-            <Link href="#" className="hover:text-[#F5B841]">
+            <Link href="/terminos" className="hover:text-[#F5B841]">
               Términos de Servicio
             </Link>
-            <Link href="#" className="hover:text-[#F5B841]">
+            <Link href="/privacidad" className="hover:text-[#F5B841]">
               Política de Privacidad
             </Link>
           </div>
