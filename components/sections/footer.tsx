@@ -1,6 +1,7 @@
 "use client"
 
-import { Bot, Mail, Phone, MapPin, Instagram, MessageCircle } from "lucide-react"
+import { Mail, Phone, MapPin, Instagram, MessageCircle } from "lucide-react"
+import Image from "next/image"
 import Link from "next/link"
 
 export function Footer() {
@@ -11,8 +12,8 @@ export function Footer() {
           {/* Brand */}
           <div className="lg:col-span-2">
             <Link href="/" className="flex items-center gap-2 group">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#F5B841] transition-transform group-hover:scale-110">
-                <Bot className="h-6 w-6 text-[#121212]" />
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#F5B841] transition-transform group-hover:scale-110 overflow-hidden">
+                <Image src="/logo_Lazyzz.png" alt="TurnosBot Logo" width={32} height={32} className="object-contain" />
               </div>
               <span className="text-xl font-bold text-foreground">
                 Turnos<span className="text-[#F5B841]">Bot</span>

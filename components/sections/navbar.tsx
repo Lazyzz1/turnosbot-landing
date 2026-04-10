@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
-import { Menu, X, Bot } from "lucide-react"
+import { Menu, X } from "lucide-react"
+import Image from "next/image"
 import Link from "next/link"
 
 export function Navbar() {
@@ -34,8 +35,8 @@ export function Navbar() {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 group">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#F5B841] transition-transform group-hover:scale-110">
-              <Bot className="h-6 w-6 text-[#121212]" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#F5B841] transition-transform group-hover:scale-110 overflow-hidden">
+              <Image src="/logo_Lazyzz.png" alt="TurnosBot Logo" width={32} height={32} className="object-contain" />
             </div>
             <span className="text-xl font-bold text-foreground">
               Turnos<span className="text-[#F5B841]">Bot</span>
