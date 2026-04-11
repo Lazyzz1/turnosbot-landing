@@ -35,8 +35,8 @@ export function Navbar() {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 group">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#F5B841] transition-transform group-hover:scale-110 overflow-hidden">
-              <Image src="/logo_Lazyzz.png" alt="TurnosBot Logo" width={32} height={32} className="object-contain" />
+            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#1a1a1a] border border-[#F5B841]/30 transition-transform group-hover:scale-110 overflow-hidden">
+              <Image src="/logo_Lazyzz.png" alt="TurnosBot Logo" width={38} height={38} className="object-contain" />
             </div>
             <span className="text-xl font-bold text-foreground">
               Turnos<span className="text-[#F5B841]">Bot</span>
